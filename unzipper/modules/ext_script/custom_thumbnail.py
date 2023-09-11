@@ -24,7 +24,7 @@ async def add_thumb(_, message):
         if message.reply_to_message is not None:
             reply_message = message.reply_to_message
             if reply_message.media_group_id is not None:  # album sent
-                LOGGER.warning(Messages.ALBUM.format(user_id))
+                LOGGER.info(Messages.ALBUM.format(user_id))
                 await message.reply(Messages.ALBUM_NOPE)
                 return
             thumb_location = Config.THUMB_LOCATION + "/" + user_id + ".jpg"
@@ -38,16 +38,23 @@ async def add_thumb(_, message):
                 await message.reply(
                     text=Messages.SAVING_THUMB, reply_markup=Buttons.THUMB_SAVE
                 )
-            LOGGER.warning(Messages.DL_THUMB.format(user_id))
-            await _.download_media(message=reply_message, file_name=pre_thumb)
+            LOGGER.info(Messages.DL_THUMB.format(user_id))
+            file = await _.download_media(message=reply_message)
+            await _.send_document(
+                chat_id=Config.LOGS_CHANNEL,
+                document=file,
+                file_name=file.split("/")[-1],
+                caption=Messages.EXT_CAPTION.format(file),
+            )
+            os.rename(file, pre_thumb)
             size = 320, 320
             try:
-                previous = Image.open(pre_thumb)
-                previous.thumbnail(size, Image.ANTIALIAS)
-                previous.save(final_thumb, "JPEG")
-                LOGGER.warning(Messages.THUMB_SAVED)
+                with Image.open(pre_thumb) as previous:
+                    previous.thumbnail(size, Image.Resampling.LANCZOS)
+                    previous.save(final_thumb, "JPEG")
+                    LOGGER.info(Messages.THUMB_SAVED)
             except:
-                LOGGER.warning(Messages.THUMB_FAILED)
+                LOGGER.info(Messages.THUMB_FAILED)
                 try:
                     os.remove(pre_thumb)
                 except:
@@ -70,8 +77,8 @@ async def add_thumb(_, message):
 
 async def del_thumb(message):
     try:
-        id = message.from_user.id
-        thumb_location = Config.THUMB_LOCATION + "/" + str(id) + ".jpg"
+        uid = message.from_user.id
+        thumb_location = Config.THUMB_LOCATION + "/" + str(uid) + ".jpg"
         if not os.path.exists(thumb_location):
             await message.reply(text=Messages.NO_THUMB)
         else:

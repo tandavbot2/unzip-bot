@@ -10,15 +10,6 @@ from config import Config
 boottime = time.time()
 
 plugins = dict(root="modules")
-premiumuser = Client(
-    "PremiumUser",
-    session_string=Config.SESSION_STRING,
-    api_id=Config.APP_ID,
-    api_hash=Config.API_HASH,
-    plugins=plugins,
-    sleep_threshold=10,
-    max_concurrent_transmissions=3,
-)
 unzipperbot = Client(
     "UnzipperBot",
     bot_token=Config.BOT_TOKEN,
@@ -35,7 +26,13 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - %(threadName)s - %(message)s",
 )
 LOGGER = logging.getLogger(__name__)
-logging.getLogger("aiohttp").setLevel(logging.INFO)
 logging.getLogger("asyncio").setLevel(logging.WARNING)
-logging.getLogger("motor").setLevel(logging.INFO)
+logging.getLogger("aiohttp").setLevel(logging.WARNING)
+logging.getLogger("aiofiles").setLevel(logging.WARNING)
+logging.getLogger("dnspython").setLevel(logging.WARNING)
+logging.getLogger("GitPython").setLevel(logging.WARNING)
+logging.getLogger("motor").setLevel(logging.WARNING)
+logging.getLogger("Pillow").setLevel(logging.WARNING)
+logging.getLogger("psutil").setLevel(logging.WARNING)
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
+logging.getLogger("requests").setLevel(logging.WARNING)

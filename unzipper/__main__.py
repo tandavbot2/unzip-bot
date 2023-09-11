@@ -9,7 +9,7 @@ from pyrogram.errors import AuthKeyDuplicated
 
 from config import Config
 
-from . import unzipperbot, premiumuser
+from . import LOGGER, unzipperbot
 from .helpers.start import check_logs, dl_thumbs, set_boot_time, removal
 from .modules.bot_data import Messages
 
@@ -23,15 +23,6 @@ def handler_stop_signals(signum, frame):
 
 signal.signal(signal.SIGINT, handler_stop_signals)
 signal.signal(signal.SIGTERM, handler_stop_signals)
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(name)s - %(threadName)s - %(message)s",
-)
-LOGGER = logging.getLogger(__name__)
-logging.getLogger("pyrogram").setLevel(logging.WARN)
-logging.getLogger("motor").setLevel(logging.INFO)
-logging.getLogger("aiohttp").setLevel(logging.INFO)
 
 while running:
     if __name__ == "__main__":
@@ -47,11 +38,6 @@ while running:
         )
         set_boot_time()
         dl_thumbs()
-        if Config.SESSION_STRING:
-            try:
-                premiumuser.start()
-            except AuthKeyDuplicated:
-                pass
         LOGGER.info(Messages.CHECK_LOG)
         if check_logs():
             LOGGER.info(Messages.LOG_CHECKED)
