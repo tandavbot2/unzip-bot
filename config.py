@@ -16,7 +16,7 @@ class Config:
     TG_PREMIUM_SIZE = TG_MAX_SIZE * 2
     # Default chunk size (0.005 MB → 1024*6) Increase if you need faster downloads
     CHUNK_SIZE = 1024 * 1024 * 10  # 10 MB
-    BOT_THUMB = f"{os.path.dirname(__file__)}/bot_thumb.jpg"
+    BOT_THUMB = f"{os.path.dirname(__file__)}/extractor_sh_bot_thumb.jpg"
     MAX_CONCURRENT_TASKS = 50
     MAX_TASK_DURATION_EXTRACT = 45 * 60  # 45 minutes (in seconds)
     #MAX_TASK_DURATION_MERGE = 24 * 60 * 60  # 1 hour 30 minutes (in seconds)
